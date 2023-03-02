@@ -9,6 +9,14 @@ Single data Example: https://openapi.programming-hero.com/api/ai/tool/01
 function dataLoad(){
     fetch(' https://openapi.programming-hero.com/api/ai/tools')
     .then(response => response.json())
-    .then(data => console.log(data))
+    .then(data => displayData(data))
 }
+
+const displayData = universe =>{
+    // const universeContainer = document.getElementById("universe");
+    console.log(universe);
+}
+
+
+
 dataLoad();
