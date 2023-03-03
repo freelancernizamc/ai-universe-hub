@@ -44,7 +44,9 @@ const displayData = (tools) => {
               <h5 class="card-text">${tool.name}</h5>
               <div class="d-flex justify-content-between">
               <span class="date"><i class="fa fa-calendar"></i> 11/01/2022</span>&emsp;
-              <span onclick="displayDetails(${tool.id})" class="text-danger fw-bold"> &#x2192;</span>
+              <span onclick="displayDetails(${tool.id})" class="text-danger fw-bold" data-bs-toggle="modal"
+              data-bs-target="#myModal"> &#x2192;</span>
+
 
 
               </div>
@@ -58,34 +60,12 @@ const displayData = (tools) => {
 };
 
 
-const loadDetails = async id =>{
-  const url =`https://openapi.programming-hero.com/api/ai/tool/${id}`;
-  const res = await fetch(url);
-  const data = await res.json();
-  displayDetails(data.data.tool);
-
-}
-
-const displayDetails = (tool) => {
-  const modalTitle = document.getElementById('myModalLabel2');
-  modalTitle.innerText = tool.name;
-  const toolImage = document.querySelector('#img .img-fluid');
-  toolImage.setAttribute('src', tool.image);
-  const toolDetails = document.getElementById('details');
-  toolDetails.innerHTML = `
-   
-    <p>Others: ${tool.features['1'] ? tool.features['1'] : 'No information'}</p>
-  
-  `;
-
-  // Show the modal
-  const myModal = new bootstrap.Modal(document.getElementById('myModal'));
-  myModal.show();
-};
 
 
 
-dataLoad();
+
+
+
 
 const showAllData = () =>{
   fetch("https://openapi.programming-hero.com/api/ai/tools")
@@ -95,3 +75,42 @@ const showAllData = () =>{
   displayData(data.data.tools);
 });
 }
+
+const loadDetails = async () =>{
+  const url =`https://openapi.programming-hero.com/api/ai/tool/01`;
+  const res = await fetch(url);
+  const data = await res.json();
+  displayDetails(data.data.tools);
+}
+
+
+const displayDetails = (tools) => {
+  const modalTitle = document.getElementById('myModalLabel2');
+  const tooldetails = document.getElementById('details');
+  let toolHTML = '';
+  
+  tools.forEach(tool => {
+    toolHTML += `
+      <div class="row g-0">
+        <div class="col-md-4" id="img">
+          <img src="${data.tool.image_link}" class="img-fluid rounded-start" alt="...">
+        </div>
+        <div class="col-md-8">
+          <div class="card-body">
+            <h5>${tool.tool_name}</h5>
+            <p>${tool.description}</p>
+          </div>
+        </div>
+      </div>
+    `;
+  });
+
+  tooldetails.innerHTML = toolHTML;
+
+  // Show the modal
+  const myModal = new bootstrap.Modal(document.getElementById('myModal'));
+  myModal.show();
+};
+
+
+dataLoad();
