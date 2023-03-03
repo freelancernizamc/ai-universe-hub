@@ -73,10 +73,9 @@ const displayDetails = (tool) => {
   toolImage.setAttribute('src', tool.image);
   const toolDetails = document.getElementById('details');
   toolDetails.innerHTML = `
-    <p>Release Date: ${tool.releaseDate ? tool.releaseDate : 'No Release Date Found'}</p>
+   
     <p>Others: ${tool.features['1'] ? tool.features['1'] : 'No information'}</p>
-    <p>Storage: ${tool.mainFeatures ? tool.mainFeatures.storage : 'No storage information'}</p>
-    <p>Sensor: ${tool.mainFeatures && tool.mainFeatures.sensors ? tool.mainFeatures.sensors[0] : 'No sensor'}</p>
+  
   `;
 
   // Show the modal
