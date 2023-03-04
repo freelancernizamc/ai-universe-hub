@@ -52,7 +52,8 @@ const displayData = (tools) => {
       `;
       universeContainer.appendChild(toolDiv);
   });
-  
+  // stop loader
+  toggleSpinner(false);
 };
 
 
@@ -66,6 +67,16 @@ const showAllData = () =>{
   console.log(data);
   displayData(data.data.tools);
 });
+}
+// spinner
+const toggleSpinner = isLoading => {
+  const loaderSection = document.getElementById('loader');
+  if(isLoading){
+      loaderSection.classList.remove('d-none')
+  }
+  else{
+      loaderSection.classList.add('d-none');
+  }
 }
 
 dataLoad();
@@ -98,7 +109,7 @@ const displayDetails = (tools) => {
           <div class="d-flex">
           <div>
           <h5>Feature</h5>
-          <ul><li>${tools.features}</li></ul>
+          <ul><li>${(tools['features'])}</li></ul>
           </div>
           <div>
           <h5>Integrations</h5>
