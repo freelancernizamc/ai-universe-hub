@@ -34,14 +34,14 @@ const displayData = (tools) => {
             <img src="${tool.image}" class="card-img-top" alt="...">
             <div class="card-body">
             <h5>Feature</h5>
-            <ol><li>${tool.features}<li></ol>
+            <ul><li>${tool.features}<li></ul>
               
               <hr>
               
               <h5 class="card-text">${tool.name}</h5>
               <div class="d-flex justify-content-between">
               <span class="date"><i class="fa fa-calendar"></i>  ${tool.published_in}</span>&emsp;
-              <span onclick="displayDetails('${tool}')" class="text-danger fw-bold" data-bs-toggle="modal"
+              <span onclick="loadDetails('${tool}')" class="text-danger fw-bold" data-bs-toggle="modal"
               data-bs-target="#myModal"> &#x2192;</span>
 
             </div>
@@ -56,7 +56,7 @@ const displayData = (tools) => {
   toggleSpinner(false);
 };
 
-
+dataLoad();
 
 
 
@@ -67,7 +67,25 @@ const showAllData = () =>{
   console.log(data);
   displayData(data.data.tools);
 });
+
+
+function loadMoreData() {
+  
+  let loadedDataCount = 0;
+  
+  if (loadedDataCount >= totalDataCount) {
+    // Hide the "Show All" button
+    document.getElementById("show-all").style.display = "none";
+  }
 }
+
+
+
+  document.getElementById("show-all").addEventListener("click", loadMoreData);
+}
+
+
+
 // spinner
 const toggleSpinner = isLoading => {
   const loaderSection = document.getElementById('loader');
@@ -79,49 +97,58 @@ const toggleSpinner = isLoading => {
   }
 }
 
-dataLoad();
+toggleSpinner(true);
 
-const loadDetails = async (tool) => {
-  const url = `https://openapi.programming-hero.com/api/ai/tool/01`;
+
+
+const loadDetails = async () => {
+  const url = `https://openapi.programming-hero.com/api/ai/tool/02`;
   const res = await fetch(url);
   const data = await res.json();
-  displayDetails(data.data.tools);
+  displayDetails(data.data);
+
 };
 
-const displayDetails = (tools) => {
+const displayDetails = (data,tool) => {
   const modalTitle = document.getElementById('myModalLabel2');
   const cardDetails = document.getElementById('details');
   let toolHTML = '';
-  console.log(tools);
+  console.log(data);
   toolHTML += `
     <div class="row g-0 modal-xl">
-      <div class="col-md-4" id="img">
-        <img src="${tools.image}" class="img-fluid rounded-start" alt="...">
-      </div>
-      <div class="col-md-8">
-        <div class="card-body">
-          <h5>${tools.description}</h5>
+    <div class="col-md-8">
+    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+        <div class="card-body border border-danger">
+          <h5>${data.description}</h5>
           <div class="d-flex">
+
           <div class="text-success text-center w-25 shadow"><p>Free of Cost/Basic</p></div>
           <div class="text-warning text-center w-25 shadow"><p>Free Of Cost/Pro</p></div>
           <div class="text-danger text-center w-25 shadow"><p>Free of Cost /Enterprise</p></div>
           </div>
           <div class="d-flex">
           <div>
-          <h5>Feature</h5>
-          <ul><li>${(tools['features'])}</li></ul>
+          <h6>Feature</h6>
+          <ul><li>${data.features}</li></ul>
           </div>
           <div>
-          <h5>Integrations</h5>
-          <ul><li>${tools.integrations}</li></ul>
+          <h6>Integrations</h6>
+          <ul>
+           ${data.integrations}
+           </ul>
         </div>
         </div>
       </div>
     </div>
+      <div class="col-md-4" id="img">
+     <img src = "${data.image_link}">
+      
+      </div>
+      
   `;
-
+ 
   cardDetails.innerHTML = toolHTML;
-
+ 
   // Show the modal
   const myModal = new bootstrap.Modal(document.getElementById('myModal'));
   myModal.show();
@@ -129,7 +156,9 @@ const displayDetails = (tools) => {
 
 
 
+// short by date
+document.getElementById('shortByDate').addEventListener('click', function(e){
+  const sortedTools = data.data.tools.sort((a, b) => new Date(a.published_in) - new Date(b.published_in));
+  displayData(sortedTools);
+});
 
-
-
-loadDetails();
