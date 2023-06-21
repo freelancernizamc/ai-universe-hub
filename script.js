@@ -25,6 +25,7 @@ const displayData = (tools) => {
   const showAll = document.getElementById('show-all');
   // tools = tools.slice(0, 6);
   
+  // <ol>${tool.features.map((tool) => ('<li>${tool.features}</li>')).join("")}</ol>
   
   tools.forEach (tool =>{
       const toolDiv = document.createElement('div');
@@ -34,7 +35,7 @@ const displayData = (tools) => {
             <img src="${tool.image}" class="card-img-top" alt="...">
             <div class="card-body">
             <h5>Feature</h5>
-            <ul><li>${tool.features}<li></ul>
+            <ol><li>${tool.features}<li></ol>
               
               <hr>
               
@@ -55,6 +56,12 @@ const displayData = (tools) => {
   // stop loader
   toggleSpinner(false);
 };
+// short by date
+document.getElementById('shortByDate').addEventListener('click', function(e){
+  const sortedTools = data.data.tools.sort((a, b) => parseInt(a.published_in) - parseInt(b.published_in) ? 1: -1);
+  displayData(sortedTools);
+});
+
 
 dataLoad();
 
@@ -141,7 +148,7 @@ const displayDetails = (data,tool) => {
       </div>
     </div>
       <div class="col-md-4" id="img">
-     <img src = "${data.image_link}">
+     <img src = "{data.image_link && data.image_link[0]}">
       
       </div>
       
@@ -156,9 +163,4 @@ const displayDetails = (data,tool) => {
 
 
 
-// short by date
-document.getElementById('shortByDate').addEventListener('click', function(e){
-  const sortedTools = data.data.tools.sort((a, b) => new Date(a.published_in) - new Date(b.published_in));
-  displayData(sortedTools);
-});
 
